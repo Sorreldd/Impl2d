@@ -25,8 +25,15 @@ public class Polygon2DImpl implements Polygon2D {
 
 	@Override
 	public double getArea() {
-		// TODO Auto-generated method stub
-		return 0;
+		double a, b, c, pp, ans = 0;
+		for(int i = 2; i < n; i++) {
+			a = dist(0, i);
+			b = dist(0, i - 1);
+			c = dist(i, i - 1);
+			pp = (a + b + c) / 2;
+			ans += Math.sqrt(pp * (pp - a) * (pp - b) * (pp - c));
+		}
+		return ans;
 	}
 
 	@Override
@@ -49,7 +56,6 @@ public class Polygon2DImpl implements Polygon2D {
 		massCen.y = massCen.y / n;
 		return massCen;
 	}
-
 	@Override
 	public void rotateRelativeToPoint(Point point, double angle) {
 		// TODO Auto-generated method stub
