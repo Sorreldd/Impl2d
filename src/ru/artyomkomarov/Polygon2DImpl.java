@@ -42,6 +42,7 @@ public class Polygon2DImpl implements Polygon2D {
 		for(int i = 0; i < n - 1; i++) {
 			perim += dist(i, i + 1);
 		}
+		perim += dist(0, n - 1);		
 		return perim;
 	}
 
@@ -57,9 +58,13 @@ public class Polygon2DImpl implements Polygon2D {
 		return massCen;
 	}
 	@Override
-	public void rotateRelativeToPoint(Point point, double angle) {
-		// TODO Auto-generated method stub
-		
+	public void rotateRelativeToPoint(Point p0, double angle) {
+		double X, Y;
+		for(int i = 0; i < n; i++) {
+			X = p0.x + (p[i].x - p0.x) * Math.cos(angle) - (p[i].y - p0.y) * Math.sin(angle);
+			Y = p0.y + (p[i].y - p0.y) * Math.cos(angle) + (p[i].x - p0.x) * Math.sin(angle); 
+			p[i] = new Point(X, Y);
+		}
 	}
 
 }

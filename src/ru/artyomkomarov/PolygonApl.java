@@ -1,11 +1,7 @@
 package ru.artyomkomarov;
 
-
-import java.awt.List;
-
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 
 
 public class PolygonApl {
@@ -20,7 +16,6 @@ public class PolygonApl {
 	public static boolean cw (Point a, Point b, Point c) {
 		return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) < 0;
 	}
-
 	public static boolean ccw (Point a, Point b, Point c) {
 		return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) > 0;
 	}
@@ -80,13 +75,21 @@ public class PolygonApl {
 		
 		mn = Graham(n, mn);
 		for(int i = 0; i < n; i++) {
+			u[i] = mn[i].x;
+			v[i] = mn[i].y;
+		}
+		poly = new Polygon2DImpl(n, mn);
+		//poly = new Polygon2DImpl(n, u, v);
+		System.out.println(poly.getArea());
+		System.out.println(poly.getPerimeter());
+		System.out.println(poly.getMassCenter().x + " " + poly.getMassCenter().y);
+		
+		//poly.rotateRelativeToPoint(new Point(0, 0), 1); 
+		
+		mn = poly.getPoints();
+		for(int i = 0; i < n; i++) {
 			System.out.println(mn[i].x + " " + mn[i].y);
 		}
-		/*
-		 	poly = new Polygon2DImpl(n, mn);
-			poly = new Polygon2DImpl(n, u, v);
-		*/
-
 	}
 
 }
