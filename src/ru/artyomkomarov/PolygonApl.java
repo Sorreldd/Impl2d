@@ -95,9 +95,9 @@ public class PolygonApl {
 		}
 		poly = new Polygon2DImpl(n, mn); // создаем наш полигон
 		//poly = new Polygon2DImpl(n, u, v); // 2-рой вариант создания полигона через другой конструктор
-		System.out.println(poly.getArea()); // выводим площадь
-		System.out.println(poly.getPerimeter()); // выводим периметр
-		System.out.println(poly.getMassCenter().x + " " + poly.getMassCenter().y); // выводим центр масс
+		System.out.printf("%8.6f\n", poly.getArea()); // выводим площадь
+		System.out.printf("%8.6f\n", poly.getPerimeter()); // выводим периметр
+		System.out.printf("%8.6f %8.6f\n", poly.getMassCenter().x, poly.getMassCenter().y); // выводим центр масс
 		
 		//poly.rotateRelativeToPoint(new Point(0, 0), 1); //можем повращать полигон вокруг какой-то точки
 		
