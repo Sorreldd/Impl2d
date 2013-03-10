@@ -5,23 +5,37 @@ import java.util.Arrays;
 
 
 public class PolygonApl {
-	static FoolDataCheckException ex = new FoolDataCheckException();
-	public static void throwExcep() {
+	static FoolDataCheckException ex = new FoolDataCheckException(); // экземпляр класса который бросает мой Exception
+////////////////////////////////////////////////////////////////////////////////////////////	
+	public static void throwExcep() { // метод который я вызываю когда нужно кинуть Exception
 		try {
 			ex.MyThrowing();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-	public static boolean cw (Point a, Point b, Point c) {
+////////////////////////////////////////////////////////////////////////////////////////////
+	// методы проверки правого и левого поворота, ориентированная площадь
+	public static boolean cw (Point a, Point b, Point c) { 
 		return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) < 0;
 	}
 	public static boolean ccw (Point a, Point b, Point c) {
 		return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) > 0;
 	}
-	
+////////////////////////////////////////////////////////////////////////////////////////////	
+	//Построение выпуклой оболочки алгоритмом Грэхэма, на случай если точки задаются не в порядке обхода
 	public static Point[] Graham(int n, Point[] a) {
-		Arrays.sort(a);
+		Arrays.sort(a); //Сортируем точки, это возможно, так как классу Point имплементим Comparable и перезагружаем compareTo
+		/*
+		 * Дальше Грэхэм, краткое описание, две точки самую левую нижнюю и самую правую верхнюю
+		 * проводим через них прямую, оставшиеся точки разбились на два множества, 
+		 * для верхнего и нижнего множества строим выпуклые оболочки потом сливаем их воедино.
+		 * Чтобы получить, верхнюю оболочку, нужно отсортировать все точки по абсциссе, затем пройтись по всем точкам, 
+		 * рассматривая на каждом шаге саму точку и две предыдущие точки, вошедшие в оболочку. 
+		 * Если текущая тройка точек образует не правый поворот, то ближайшего соседа нужно удалить из оболочки. 
+		 * В конце, останутся только точки, входящие в выпуклую оболочку. 
+		 * Анологично для нижнего множества, но поворот левый
+		 */
 		Point p1 = a[0], p2 = a[n - 1];
 		ArrayList<Point> up = new ArrayList<Point>();
 		ArrayList<Point> down = new ArrayList<Point>();
@@ -49,45 +63,46 @@ public class PolygonApl {
 			res[k] = down.get(i);
 			k++;
 		}
-		if(k != n) throwExcep();
-		return res;
+		if(k != n) throwExcep(); // если не удалось построить оболочку ровно из n точек, значит многоугольник не выпуклый или есть совпадающие точки, в любом случае Exception
+		return res; // Возвращаем нашу построенную оболочку
 		
 	}
-	
+////////////////////////////////////////////////////////////////////////////////////////////	
 	public static void main(String[] args) {
 		int n;
 		double[] u;
 		double[] v;
-		args = new String[]{"3", "1", "1", "2", "2", "1", "2"};
-		Point[] mn, kk;
-		Polygon2DImpl qq = null;
+		args = new String[]{"3", "1", "1", "2", "2", "1", "2"}; // наши входные данные, количество точек, затем точки парой чисел
+		//args = new String[]{"3", "1", "1", "1", "1", "1", "2"}; // альтернатива, словим кучу Exception
+		Point[] mn;
 		Polygon2D poly = null;
+		//ниже парсим наши входные данные и создаем необходимые массивы
 		n = Integer.parseInt(args[0]);
 		mn = new Point[n];
 		u = new double[n];
 		v = new double[n];
-		if(n != args.length / 2 || n < 3) throwExcep();
+		if(n != args.length / 2 || n < 3) throwExcep(); // если во входных данных нам наврали или ввели недопустимое количество, кидаем Exception
 		for(int i = 0; i < n; i++) {
 			u[i] = (double)Double.parseDouble(args[2 * i + 1]);
 			v[i] = (double)Double.parseDouble(args[2 * i + 2]);
 			mn[i] = new Point(u[i], v[i]);
 		}
 		
-		mn = Graham(n, mn);
+		mn = Graham(n, mn); // строим выпуклую оболочку
 		for(int i = 0; i < n; i++) {
-			u[i] = mn[i].x;
-			v[i] = mn[i].y;
+			u[i] = mn[i].x; // разбиваем массив точек на два массива u - координаты x
+			v[i] = mn[i].y; // разбиваем массив точек на два массива v - координаты y
 		}
-		poly = new Polygon2DImpl(n, mn);
-		//poly = new Polygon2DImpl(n, u, v);
-		System.out.println(poly.getArea());
-		System.out.println(poly.getPerimeter());
-		System.out.println(poly.getMassCenter().x + " " + poly.getMassCenter().y);
+		poly = new Polygon2DImpl(n, mn); // создаем наш полигон
+		//poly = new Polygon2DImpl(n, u, v); // 2-рой вариант создания полигона через другой конструктор
+		System.out.println(poly.getArea()); // выводим площадь
+		System.out.println(poly.getPerimeter()); // выводим периметр
+		System.out.println(poly.getMassCenter().x + " " + poly.getMassCenter().y); // выводим центр масс
 		
-		//poly.rotateRelativeToPoint(new Point(0, 0), 1); 
+		//poly.rotateRelativeToPoint(new Point(0, 0), 1); //можем повращать полигон вокруг какой-то точки
 		
-		mn = poly.getPoints();
-		for(int i = 0; i < n; i++) {
+		mn = poly.getPoints(); // получаем наш полигон
+		for(int i = 0; i < n; i++) { // выводим полигон
 			System.out.println(mn[i].x + " " + mn[i].y);
 		}
 	}

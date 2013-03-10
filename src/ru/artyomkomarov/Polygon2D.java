@@ -1,6 +1,6 @@
 package ru.artyomkomarov;
 
-class Point implements Comparable {
+class Point implements Comparable { // имплементим Comparable для перезагрузки метода compareTo
     double x;
     double y;
 
@@ -8,9 +8,8 @@ class Point implements Comparable {
         this.x = x;
         this.y = y;
     }
-	
 	@Override
-	public int compareTo(Object obj) {
+	public int compareTo(Object obj) { // перезагружаем этот метод, для того, чтобы мы могли сортировать экземпляры данного класса
 		Point tmp = (Point)obj;
 		if(this.x < tmp.x) return -1;
 		if(this.x == tmp.x && this.y < tmp.y) return -1;
