@@ -9,7 +9,14 @@ import java.util.Scanner;
 
 
 public class PolygonApl {
-	
+	static FoolDataCheckException ex = new FoolDataCheckException();
+	public static void throwExcep() {
+		try {
+			ex.MyThrowing();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
 	public static boolean cw (Point a, Point b, Point c) {
 		return a.x*(b.y-c.y)+b.x*(c.y-a.y)+c.x*(a.y-b.y) < 0;
 	}
@@ -19,7 +26,6 @@ public class PolygonApl {
 	}
 	
 	public static Point[] Graham(int n, Point[] a) {
-		//if(n != a.length || n < 3) 
 		Arrays.sort(a);
 		Point p1 = a[0], p2 = a[n - 1];
 		ArrayList<Point> up = new ArrayList<Point>();
@@ -48,7 +54,7 @@ public class PolygonApl {
 			res[k] = down.get(i);
 			k++;
 		}
-		//if(k == n) System.out.println("All OK");
+		if(k != n) throwExcep();
 		return res;
 		
 	}
@@ -57,25 +63,30 @@ public class PolygonApl {
 		int n;
 		double[] u;
 		double[] v;
+		args = new String[]{"3", "1", "1", "2", "2", "1", "2"};
 		Point[] mn, kk;
 		Polygon2DImpl qq = null;
 		Polygon2D poly = null;
-		Scanner sc = new Scanner(System.in);
-		n = sc.nextInt();
+		n = Integer.parseInt(args[0]);
 		mn = new Point[n];
 		u = new double[n];
 		v = new double[n];
-		
+		if(n != args.length / 2 || n < 3) throwExcep();
 		for(int i = 0; i < n; i++) {
-			u[i] = sc.nextDouble();
-			v[i] = sc.nextDouble();
+			u[i] = (double)Double.parseDouble(args[2 * i + 1]);
+			v[i] = (double)Double.parseDouble(args[2 * i + 2]);
 			mn[i] = new Point(u[i], v[i]);
 		}
+		
 		mn = Graham(n, mn);
+		for(int i = 0; i < n; i++) {
+			System.out.println(mn[i].x + " " + mn[i].y);
+		}
 		/*
 		 	poly = new Polygon2DImpl(n, mn);
 			poly = new Polygon2DImpl(n, u, v);
 		*/
 
 	}
+
 }
