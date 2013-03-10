@@ -1,6 +1,6 @@
 package ru.artyomkomarov;
 
-class Point {
+class Point implements Comparable {
     double x;
     double y;
 
@@ -8,6 +8,14 @@ class Point {
         this.x = x;
         this.y = y;
     }
+	
+	@Override
+	public int compareTo(Object obj) {
+		Point tmp = (Point)obj;
+		if(this.x < tmp.x) return -1;
+		if(this.x == tmp.x && this.y < tmp.y) return -1;
+		return 1;
+	}
 }
 
 public interface Polygon2D {
